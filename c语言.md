@@ -119,6 +119,8 @@ static （文件级别） 这个变量只能在当前的.c文件中使用，程�
 static (函数级别) 该变量只能在该函数中访问 （很少使用）
 
 # memory management
+malloc返回一个空指针，用于分配内存。比如开辟一块内存给一个数组，这个数组可以放入howMany个int数。free用于释放内存。
+
 ```c
 char *ptr;
 ptr = (char *)malloc(24);   // 分配24个char大小的内存空间
@@ -179,5 +181,8 @@ void filecopy(FILE *ifp, FILE *ofp) {
         putc(c, ofp);
 }
 ```
+
+### restrict
+关键字restrict只用于限定指针；该关键字用于告知编译器，所有修改该指针所指向内容的操作全部都是基于(base on)该指针的，即不存在其它进行修改操作的途径；这样的后果是帮助编译器进行更好的代码优化，生成更有效率的汇编代码。
 
 
