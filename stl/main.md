@@ -18,3 +18,10 @@ modifiers: clear, insert, emplace, erase, push_back, pop_back, resize, swap
 for (int a : v){}
 ```
 
+### stack
+```
+stack<int> s;
+element access: top
+capacity: empty, size
+modifiers: push, pop, emplace, swap
+```
