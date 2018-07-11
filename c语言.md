@@ -111,8 +111,6 @@ typedef struct Person {
 如果你有一个指针p, 则毫不犹豫地使用 p->field。如果你在处理一个值v,则使用v.field
 
 
-# 预处理
-
 # extern vs static
 extern关键字告诉编译器“这个变量已经存在，但是他在别的外部区域”。通常它的意思是一个c文件要用到另一个c文件中定义的变量
 static （文件级别） 这个变量只能在当前的.c文件中使用，程序其他部分不能访问。
@@ -128,61 +126,9 @@ strcpy(ptr, "hello there");
 free(ptr);
 ```
 
-# io
-man stdio
-
-### word count
-```c
-#define IN 1
-#define OUT 0
-
-int main() {
-    int c, nl, nw, nc, state;
-    state = OUT;
-    nl = nw = nc = 0;
-    while ((c = getchar()) != EOF) {
-        ++nc;
-        if (c == '\n') ++nl;
-        if (c == ' ' || c == '\n' || c == '\t') {
-            state = OUT;
-        } else if (state == OUT) {
-            state = IN;
-            ++nw;
-        }
-    }
-}
-```
-
-### cat
-```c
-int main(int argc, char *argv[]) {
-    FILE *fp;
-    void filecopy(FILE *, FILE *);
-
-    if (argc == 1) {
-        filecopy(stdin, stdout);
-    }else {
-        while (--argc > 0) {
-            if ((fp = fopen(*++argv, "r")) == NULL) {
-                printf("can't open %s\n", *argv);
-                exit(1);
-            } else {
-                filecopy(fp, stdout);
-                fclose(fp);
-            }
-        }
-    }
-    return 0;
-}
-
-void filecopy(FILE *ifp, FILE *ofp) {
-    int c;
-    while ((c = getc(ifp)) != EOF)
-        putc(c, ofp);
-}
-```
-
 ### restrict
 关键字restrict只用于限定指针；该关键字用于告知编译器，所有修改该指针所指向内容的操作全部都是基于(base on)该指针的，即不存在其它进行修改操作的途径；这样的后果是帮助编译器进行更好的代码优化，生成更有效率的汇编代码。
 
-
+# 内联函数
+程序编译后得到的可执行程序是由一组机器语言指令组成。运行程序时，操作系统将这些指令载入到计算机内存中，因此每条指令都有特定的内存地址。执行函数调用时，程序将在函数调用后立即存储改指令的内存地址，并将函数参数复制到栈中，然后跳到标记的函数起点的内存单元开始执行函数代码。等执行完成后在跳回原来的地址。这种来回跳跃需要一定的开销。
+在函数声明前以及函数定义前加上关键字inline，在编译的时候，编译器会将函数调用替换为函数代码。

@@ -1,13 +1,12 @@
 # c++ 四大组成
+```
 c: blocks, statements, preprocessor, pointers
 面向对象c++: class, 封装，继承，多态，virtual函数（动态绑定）
 template c++: 泛型编程
 STL: template程序库。容器，迭代器，算法，函数对象。。。
-
-# repl.it
+```
 
 # 类型别名
-
 ```cpp
 #define BYTE char  // 预处理器，预编译阶段替换，无脑替换
 #define addNum(x,y) (x + y)
@@ -31,37 +30,19 @@ using FP = void (*) (int, const std::string&);
 ```c
 int *parr = new int[10];
 delete[] parr; // 方括号告诉程序，需要释放整个数组，而不仅仅是指针指向的元素。
-```
 
 当计算机内存不够时，new将会返回0。在c++中，值为0的指针被称为空值指针。
-
 不要使用delete来释放不是new分配的内存。
 不要使用delete释放同一个内存块两次。
 如果使用new[]为数组分配内存，则应使用delete[]来释放。
 如果使用new[]为一个实体分配内存，则应使用delete来释放。
 对空值指针应用delete是安全的。
-
-# 在函数后面加上const可以将this限定为const
-
-```cpp
-class Foo{
-    std::string Name;
-public:
-    const std::string &getName() const {
-        return Name;
-    }
-}
 ```
-
-# 内联函数
-程序编译后得到的可执行程序是由一组机器语言指令组成。运行程序时，操作系统将这些指令载入到计算机内存中，因此每条指令都有特定的内存地址。执行函数调用时，程序将在函数调用后立即存储改指令的内存地址，并将函数参数复制到栈中，然后跳到标记的函数起点的内存单元开始执行函数代码。等执行完成后在跳回原来的地址。这种来回跳跃需要一定的开销。
-在函数声明前以及函数定义前加上关键字inline，在编译的时候，编译器会将函数调用替换为函数代码。
 
 # 函数默认参数
 ```cpp
 char * left (const char * str, int n = 1);
 ```
-
 
 # template 
 ### template function
@@ -163,3 +144,81 @@ g++ sqrt.c -lm
 ```
 
 
+# 异常 (try, catch, throw)
+```c
+try {
+    z = hmean(x,y);
+} catch (const char * s) {
+    std::cout << s << std::endl;
+    ...
+}
+   
+double hmean(double a, double b) {
+    if (a == -b) {
+        throw "ban hmean() arguments: a = -b not allowed";
+    }
+    return 2.0 * a * b / (a + b);
+}
+```
+
+c++异常的主要目的是为了设计容错程序提供语言级支持，异常使得在程序设计中包含错误处理功能更容易，以免事后采取更严格的错误处理方式。
+
+```c
+#include <exception>
+class bad_hmean : public std::exception {
+public:
+    const char * what() {
+        return "bad argument to hmean()";
+    }
+    ...
+};
+
+class bad_gmean : public std::exception {
+public:
+    const char * what() {
+        return "bad arguments to gmean()";
+    }
+    ...
+}
+```
+
+标准库中定义了几个异常类: domain_error, invalid_argument, length_error, out_of_bounds, runtime_error等等
+
+```c
+try {...}
+catch(out_of_bounds & oe) {...}
+catch(logic_error & oe) {...}
+catch(exception & oe) {...}
+```
+
+对于处理使用new时可能出现的内存分配问题。你可以选择让new返回一个空指针，或者让new引发bad_alloc异常。
+
+
+# RTTI (Runtime Type Identification)
+运行时类型识别，旨在为程序在运行阶段确定对象的类型。很多类库已经为其类对象提供了实现RTTI功能的方式。警告： RTTI只适应于包含虚函数的类。
+
+假设有一个类层次结构，其中的类都是从同一个基类派生的，则可以让基类指针指向其中任何一个类的对象。问题是，如何知道指针指向的是哪个类的对象呢？？
+
+### dynamic_cast
+dynamic_cast是最常用的RTTI组件，它不能回答“指针指向的是哪类对象”的问题，但可以回答“是否可以安全地将对象的地址赋给特定类型的指针”的问题。
+
+```c
+class Grand{ // has virtual methods }
+class Superb: public Grand {...};
+class Magnificant: public Superb{...};
+Grand *pg = new Grand;
+...
+
+Superb *pm = dynamic_cast<Superb *>(pb);
+```
+
+### typeid操作符和type_info类
+```c
+typeid (Magnificant) == typeid(*pg)
+```
+
+### 类型转换操作符
+dynamic_cast;
+const_cast;
+static_cast;
+reinterpret_cast;
