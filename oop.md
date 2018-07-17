@@ -1,5 +1,3 @@
-cout是一个ostream类对象,cin是一个istream类对象。
-
 ### 构造函数
 构造函数用于构建类的对象。如果用户没有提供构造函数，c++将自动提供默认构造函数。
 **在设计类时，最好主动提供对所有类成员做隐式初始化的构造函数，而不要使用编译器提供的默认构造函数。**
@@ -15,33 +13,21 @@ private:
   double share_val;
 }
 // 定义构造函数
-Stock::Stock(const std::string &company, int shares, double share_val) : company(company), shares(shares), share_val(share_val) {}
+Stock::Stock(const std::string &company, int shares, double share_val) 
+    : company(company), shares(shares), share_val(share_val) {}
 
-
-
-// 显式调用构造函数
-Stock s0 = Stock("nano", 20, 12.5);
-s0.show();
-
-// 隐式调用构造函数
-Stock s1("nano", 20, 12.5); 
+Stock s0 = Stock("nano", 20, 12.5);  // 显式调用构造函数
+Stock s1("nano", 20, 12.5);          // 隐式调用构造函数
 s1.show();
 
-// 构造函数与new结合使用,返回对象指针。这种情况下对象没有名称，但可以通过指针操作对象
-Stock *s2 = new Stock("nano", 20, 12.5);
+Stock *s2 = new Stock("nano", 20, 12.5);   // 构造函数与new结合使用,返回对象指针。这种情况下对象没有名称，但可以通过指针操作对象
 s2->show();
 ```
 
 tip: **如果既可以通过初始化，也可以通过赋值来设置对象的值，则应该采用初始化方式。通常效率更高**
 
 ### 析构函数
-对象过期时，程序将自动调用一个特殊的成员函数：析构函数。析构函数负责save our ass。比如说你在构造函数里面使用new分配了一些内存，就需要在析构函数中调用delete来释放这些内存。
-
-上面的代码中，我们没有在构造函数中通过new分配内存，所以也不需要在析构函数中执行delete操作，这时候我们直接使用编译器生成的什么都不做的析构函数。
-
-```cpp
-Stock::~Stock() {}
-```
+对象过期时，程序将自动调用一个特殊的成员函数：析构函数。析构函数负责save our ass。比如说你在构造函数里面使用new分配了一些内存，就需要在析构函数中调用delete来释放这些内存。上面的代码中，我们没有在构造函数中通过new分配内存，所以也不需要在析构函数中执行delete操作，这时候我们直接使用编译器生成的什么都不做的析构函数。
 
 通常不应该在代码中显式调用析构函数（有例外情况），而应该让编译器决定什么时候调用析构函数。如果是静态存储变量，则析构函数在程序结束时调用。如果是自动变量，则在程序执行完代码块时调用。如果对象是通过new创建的，则析构函数在使用delete释放内存时调用。
 
@@ -57,29 +43,11 @@ c++自动提供了下面这些成员函数：
 复制构造函数用于将一个对象复制到一个新对象中，它用于初始化过程。原型为Class_name (const Class_name &);新建一个对象并将其初始化为同类对象的时候，复制构造函数都会被调用。最常见的情况还是将新对象显示初始化为现有对象的时候。
 比如 StringBad sailer = sports； 
 实际调用了 StringBad sailor = StringBad(sports);
-
 除此之外，当函数按值传递对象时，或者函数返回对象时，也都将调用复制构造函数。
-
 使用默认复制构造函数存在一些危险，比如你希望在构造函数里面搞点黑科技，但是忘了重写复制构造函数。。。可以考虑使用显式复制构造函数来解决。
 
-与复制构造函数类似，默认的赋值操作符也会存在这样的问题，有必要的时候应当自己实现。
-
 ### const成员函数
-const成员函数表明该函数不能修改对象。我们应该尽量将成员函数标记为const成员函数（只有函数不会修改对象）。
-
-```cpp
-class Stock {
-public:
-  void show()const;
-}
-
-void Stock::show()const {
-    std::cout << "company: " << company
-              << " shares: " << shares << std::endl
-              << " share prices: $" << share_val << std::endl
-              << " total worth: $" << total_val << std::endl;
-}
-```
+const成员函数表明该函数不能修改对象。我们应该尽量将成员函数标记为const成员函数。
 
 ### this指针
 每个成员函数(包括构造函数和析构函数)都有一个this指针，指向调用对象。如果函数需要使用整个对象而非地址（比如要返回对象引用），则可以使用*this解引用。
@@ -94,18 +62,8 @@ const Stock & Stock::topval(const Stock & s) const {
 }
 ```
 
-事实上成员函数在编译过程中，会被转换为第一个参数为this指针的函数。s1.show()会被转换为show(&s1)；
-
-### 对象数组
-```cpp
-Stock stocks[10] = {
-  Stock("st1", 12, 20),
-  Stock("st2", 12, 11),
-  ...
-};
-```
-
 ### 静态类成员
+？？
 
 ### 操作符重载
 operator overloading是一种形式的多态。c++允许将操作符重载扩展到用户定义的类型，比如让两个对象相加。

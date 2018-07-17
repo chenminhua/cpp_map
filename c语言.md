@@ -1,15 +1,3 @@
-# 数组
-```c
-int compare(const void * a, const void * b){
-    return (*(int *)a - *(int *)b);
-}
-
-int main() {
-    int a[10] = {5,6,1,2,3,4,5,6,7,8};  // 声明并初始化
-    qsort(a, 10, sizeof(int), compare);  // 快排
-}
-```
-
 # 指针
 ```c
 int x = 1, y = 2, z[10];
@@ -41,8 +29,6 @@ strlen("hello, world");   // 传入字符串合法
 strlen(array);            // 传入char数组合法
 strlen(ptr);              // 传入char指针合法
 ```
-
-### 指向指针
 
 ### 指向函数
 ```cpp
@@ -97,20 +83,6 @@ int strcmp(char *s, char *t) {
   return *s - *t
 }
 ```
-
-# struct 
-
-```c
-typedef struct Person {
-    string name;
-    string country;
-    int age;
-}Person;
-```
--> is a shorthand for (*x).field.
-如果你有一个指针p, 则毫不犹豫地使用 p->field。如果你在处理一个值v,则使用v.field
-
-
 # extern vs static
 extern关键字告诉编译器“这个变量已经存在，但是他在别的外部区域”。通常它的意思是一个c文件要用到另一个c文件中定义的变量
 static （文件级别） 这个变量只能在当前的.c文件中使用，程序其他部分不能访问。
