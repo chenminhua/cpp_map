@@ -138,3 +138,19 @@ char16_t, char32_t
 long long, unsigned long long
 std::nullptr_t
 ```
+
+
+# template 
+### template function
+```cpp
+template <typename T>
+void swapit(T & a, T & b) {
+    T tmp = a;
+    a = b;
+    b = tmp;
+}
+
+string s = "abc";
+string t = "cba";
+swipit(a, b);
+```

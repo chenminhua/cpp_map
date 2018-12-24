@@ -19,10 +19,18 @@ using FP = void (*) (int, const std::string&);
 ```
 
 # memory management
+malloc返回一个空指针，用于分配内存。比如开辟一块内存给一个数组，这个数组可以放入howMany个int数。free用于释放内存。
+
+```c
+char *ptr;
+ptr = (char *)malloc(24);   // 分配24个char大小的内存空间
+strcpy(ptr, "hello there");
+free(ptr);
+``
+
 自动存储: 在函数内部定义的常规变量使用自动存储空间，被称为自动变量。在函数被调用时自动产生，在函数结束时消亡。（不用手动管理）
 静态存储：整个程序执行期间都存在。使变量称为静态的方式有两种：1.static关键字，2.在函数外定义它。
 动态存储：new, delete
-
 
 ### new and delete
 使用new请求正确数量的内存，返回指向该块内存的指针。使用指针来跟踪内存的位子，使用delete释放使用new分配的内存。在c中我们需要使用malloc和free来处理内存的分配和回收
@@ -39,25 +47,7 @@ delete[] parr; // 方括号告诉程序，需要释放整个数组，而不仅�
 对空值指针应用delete是安全的。
 ```
 
-# 函数默认参数
-```cpp
-char * left (const char * str, int n = 1);
-```
 
-# template 
-### template function
-```cpp
-template <typename T>
-void swapit(T & a, T & b) {
-    T tmp = a;
-    a = b;
-    b = tmp;
-}
-
-string s = "abc";
-string t = "cba";
-swipit(a, b);
-```
 
 # 虚函数
 [为啥需要virtual函数](https://stackoverflow.com/questions/2391679/why-do-we-need-virtual-functions-in-c)
